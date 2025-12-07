@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FPV Drone Catalog</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 10px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header { text-align: center; color: white; margin-bottom: 30px; }
+        h1 { font-size: 2em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .subtitle { font-size: 1em; opacity: 0.9; }
+        .stats {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .stats-content { display: flex; justify-content: space-around; gap: 15px; flex-wrap: wrap; }
+        .stat-item { flex: 1; min-width: 120px; text-align: center; }
+        .stat-value { font-size: 1.5em; font-weight: bold; color: #667eea; }
+        .stat-label { font-size: 0.9em; color: #666; margin-top: 5px; }
+        .drone-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .drone-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .drone-card:hover { transform: translateY(-5px); box-shadow: 0 8px 12px rgba(0,0,0,0.2); }
+        .drone-header { margin-bottom: 15px; }
+        .drone-name { font-size: 1.2em; font-weight: bold; color: #333; margin-bottom: 5px; }
+        .drone-type {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #667eea;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+        }
+        .drone-specs { margin: 15px 0; font-size: 0.9em; }
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .spec-row:last-child { border-bottom: none; }
+        .spec-label { color: #666; font-weight: 500; }
+        .spec-value { color: #333; font-weight: 600; }
+        .drone-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #f0f0f0;
+        }
+        .price { font-size: 1.5em; font-weight: bold; color: #667eea; }
+        .platform {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .platform.lazada { background: #FF6600; color: white; }
+        .platform.shopee { background: #EE4D2D; color: white; }
+        .platform.tiktok { background: #000; color: white; }
+        @media (max-width: 768px) {
+            .drone-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 1.5em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚁 FPV Drone Catalog</h1>
+            <p class="subtitle">Complete Guide to FPV Drones in the Philippines</p>
+        </header>
+        <div class="stats">
+            <div class="stats-content">
+                <div class="stat-item"><div class="stat-value">100</div><div class="stat-label">Total Drones</div></div>
+                <div class="stat-item"><div class="stat-value">₱16,799</div><div class="stat-label">Avg Price</div></div>
+                <div class="stat-item"><div class="stat-value">5 Types</div><div class="stat-label">Categories</div></div>
+            </div>
+        </div>
+        <div class="drone-grid" id="droneGrid"></div>
+    </div>
+    <script>
+        var drones=[
+            {name:"IFlight Nazgul5 V2",type:"Racing",weight:"380g",camera:"Runcam Racer 5",flightTime:"4-5 min",price:15999,platform:"Lazada"},
+            {name:"GEPRC Phantom",type:"Racing",weight:"350g",camera:"Caddx Ratel 2",flightTime:"4 min",price:16500,platform:"Shopee"},
+            {name:"Emax Hawk Pro",type:"Racing",weight:"365g",camera:"Caddx Turbo Micro",flightTime:"4-5 min",price:14999,platform:"TikTok"},
+            {name:"DarwinFPV Baby Ape Pro",type:"Racing",weight:"340g",camera:"Foxeer Predator",flightTime:"4 min",price:17999,platform:"Lazada"},
+            {name:"Flywoo Explorer LR HD",type:"Racing",weight:"395g",camera:"Runcam Phoenix 2",flightTime:"5-6 min",price:19999,platform:"Shopee"},
+            {name:"BetaFPV X-Knight 5",type:"Racing",weight:"355g",camera:"Runcam Micro Swift",flightTime:"4 min",price:15499,platform:"TikTok"},
+            {name:"Diatone Roma F5",type:"Racing",weight:"375g",camera:"Caddx Vista",flightTime:"4-5 min",price:18999,platform:"Lazada"},
+            {name:"Holybro Kopis 2",type:"Racing",weight:"360g",camera:"Foxeer Falkor",flightTime:"4 min",price:16999,platform:"Shopee"},
+            {name:"GEPRC Mark5 HD",type:"Racing",weight:"380g",camera:"DJI Camera",flightTime:"5 min",price:22999,platform:"TikTok"},
+            {name:"IFlight Chimera7",type:"Racing",weight:"420g",camera:"Caddx Nebula Pro",flightTime:"5-6 min",price:21999,platform:"Lazada"},
+            {name:"GEPRC CineLog35",type:"Freestyle",weight:"285g",camera:"Naked GoPro",flightTime:"6-7 min",price:18999,platform:"Shopee"},
+            {name:"IFlight Protek35",type:"Freestyle",weight:"295g",camera:"GoPro Hero",flightTime:"6 min",price:17999,platform:"TikTok"},
+            {name:"iFlight Titan DC5",type:"Freestyle",weight:"410g",camera:"GoPro Hero 10",flightTime:"5-6 min",price:19999,platform:"Lazada"},
+            {name:"Flywoo Explorer LR V2",type:"Freestyle",weight:"380g",camera:"Naked GoPro",flightTime:"7-8 min",price:20999,platform:"Shopee"},
+            {name:"GEPRC CinePro 4K",type:"Freestyle",weight:"320g",camera:"Insta360 GO",flightTime:"7 min",price:21999,platform:"TikTok"},
+            {name:"Diatone GTB 529",type:"Freestyle",weight:"365g",camera:"DJI Action 2",flightTime:"6 min",price:23999,platform:"Lazada"},
+            {name:"BetaFPV Pavo35",type:"Freestyle",weight:"310g",camera:"GoPro Lite",flightTime:"6-7 min",price:16999,platform:"Shopee"},
+            {name:"HGLRC Veyron 5",type:"Freestyle",weight:"375g",camera:"Naked GoPro",flightTime:"5-6 min",price:18499,platform:"TikTok"},
+            {name:"IFlight Cidora SL5",type:"Freestyle",weight:"355g",camera:"GoPro Hero 9",flightTime:"6 min",price:19499,platform:"Lazada"},
+            {name:"GEPRC CineStyle 4K",type:"Freestyle",weight:"330g",camera:"Caddx Loris",flightTime:"7 min",price:20499,platform:"Shopee"},
+            {name:"IFlight Titan XL5",type:"Cinematic",weight:"580g",camera:"GoPro Hero 11",flightTime:"8-10 min",price:28999,platform:"TikTok"},
+            {name:"GEPRC CineLog30 O3",type:"Cinematic",weight:"265g",camera:"DJI O3 Air",flightTime:"9-10 min",price:32999,platform:"Lazada"},
+            {name:"Flywoo Explorer LR 4 HD",type:"Cinematic",weight:"215g",camera:"DJI Vista",flightTime:"12-15 min",price:25999,platform:"Shopee"},
+            {name:"BetaFPV Pavo25",type:"Cinematic",weight:"195g",camera:"Naked GoPro",flightTime:"8-9 min",price:14999,platform:"TikTok"},
+            {name:"Diatone Roma L7",type:"Cinematic",weight:"650g",camera:"GoPro Hero 12",flightTime:"9-11 min",price:35999,platform:"Lazada"},
+            {name:"IFlight Evoque F5X",type:"Cinematic",weight:"420g",camera:"DJI Action 2",flightTime:"7-8 min",price:24999,platform:"Shopee"},
+            {name:"GEPRC CinePro HD",type:"Cinematic",weight:"340g",camera:"Insta360 GO 3",flightTime:"8-9 min",price:26999,platform:"TikTok"},
+            {name:"iFlight Chimera9",type:"Cinematic",weight:"720g",camera:"RED Komodo",flightTime:"6-7 min",price:45999,platform:"Lazada"},
+            {name:"HGLRC Rekon 6",type:"Cinematic",weight:"480g",camera:"GoPro Hero 10",flightTime:"7-8 min",price:22999,platform:"Shopee"},
+            {name:"Flywoo Explorer LR 7",type:"Cinematic",weight:"510g",camera:"DJI O3",flightTime:"10-12 min",price:29999,platform:"TikTok"},
+            {name:"Emax Tinyhawk 3",type:"Beginner",weight:"45g",camera:"Runcam Nano 4",flightTime:"4-5 min",price:7999,platform:"Lazada"},
+            {name:"BetaFPV Cetus X",type:"Beginner",weight:"38g",camera:"BetaFPV Lite",flightTime:"5-6 min",price:6999,platform:"Shopee"},
+            {name:"GEPRC TinyGO",type:"Beginner",weight:"42g",camera:"Caddx Ant",flightTime:"5 min",price:6499,platform:"TikTok"},
+            {name:"IFlight Alpha A65",type:"Beginner",weight:"52g",camera:"Runcam Thumb",flightTime:"4 min",price:8499,platform:"Lazada"},
+            {name:"Mobula6",type:"Beginner",weight:"19g",camera:"Runcam Nano 3",flightTime:"3-4 min",price:5999,platform:"Shopee"},
+            {name:"BetaFPV Meteor65",type:"Beginner",weight:"22g",camera:"BetaFPV Micro",flightTime:"3-4 min",price:5499,platform:"TikTok"},
+            {name:"Emax Tinyhawk 2",type:"Beginner",weight:"37g",camera:"Runcam Nano 2",flightTime:"4-5 min",price:7499,platform:"Lazada"},
+            {name:"GEPRC Phantom Lite",type:"Beginner",weight:"340g",camera:"Caddx Baby Turtle",flightTime:"4-5 min",price:12999,platform:"Shopee"},
+            {name:"IFlight Alpha A75X",type:"Beginner",weight:"68g",camera:"Runcam Split 4",flightTime:"4 min",price:9999,platform:"TikTok"},
+            {name:"DarwinFPV Baby Ape",type:"Beginner",weight:"320g",camera:"Foxeer Razer",flightTime:"4-5 min",price:13999,platform:"Lazada"},
+            {name:"BetaFPV Meteor75",type:"Micro",weight:"31g",camera:"BetaFPV Micro",flightTime:"3-4 min",price:6999,platform:"Shopee"},
+            {name:"Mobula7",type:"Micro",weight:"27g",camera:"Caddx Turtle V2",flightTime:"3-4 min",price:6499,platform:"TikTok"},
+            {name:"Emax Tinyhawk S",type:"Micro",weight:"35g",camera:"Runcam Nano 2",flightTime:"4 min",price:7299,platform:"Lazada"},
+            {name:"BetaFPV Cetus Pro",type:"Micro",weight:"33g",camera:"BetaFPV Lite V2",flightTime:"4-5 min",price:7499,platform:"Shopee"},
+            {name:"GEPRC TinyGO V2",type:"Micro",weight:"39g",camera:"Caddx Ant Lite",flightTime:"4-5 min",price:6799,platform:"TikTok"},
+            {name:"NewBeeDrone Hummingbird",type:"Micro",weight:"24g",camera:"Runcam Nano 3",flightTime:"3-4 min",price:5799,platform:"Lazada"},
+            {name:"IFlight Alpha A85",type:"Micro",weight:"78g",camera:"Runcam Nano 4",flightTime:"4 min",price:9499,platform:"Shopee"},
+            {name:"HGLRC Petrel 75",type:"Micro",weight:"29g",camera:"Caddx Baby Ratel",flightTime:"3-4 min",price:6299,platform:"TikTok"},
+            {name:"BetaFPV Pavo20",type:"Micro",weight:"95g",camera:"Naked GoPro Lite",flightTime:"5-6 min",price:11999,platform:"Lazada"},
+            {name:"Mobula8",type:"Micro",weight:"34g",camera:"Caddx Ant",flightTime:"3-4 min",price:6999,platform:"Shopee"},
+            {name:"Flywoo Mr Croc HD",type:"Racing",weight:"358g",camera:"DJI Camera",flightTime:"4-5 min",price:24999,platform:"TikTok"},
+            {name:"GEPRC Cygnet3 Pro",type:"Racing",weight:"165g",camera:"Runcam Nano 3",flightTime:"5-6 min",price:12999,platform:"Lazada"},
+            {name:"IFlight Nazgul Evoque F5X",type:"Racing",weight:"395g",camera:"Caddx Vista",flightTime:"4-5 min",price:20999,platform:"Shopee"},
+            {name:"EMAX Buzz",type:"Racing",weight:"172g",camera:"Runcam Nano 2",flightTime:"4-5 min",price:9999,platform:"TikTok"},
+            {name:"Diatone MXC Taycan",type:"Racing",weight:"385g",camera:"Caddx Nebula",flightTime:"4 min",price:17499,platform:"Lazada"},
+            {name:"iFlight Cidora SL5-E",type:"Racing",weight:"362g",camera:"DJI O3",flightTime:"5 min",price:26999,platform:"Shopee"},
+            {name:"GEPRC Mark4 HD",type:"Racing",weight:"368g",camera:"DJI Camera",flightTime:"4-5 min",price:21999,platform:"TikTok"},
+            {name:"Holybro Kopis Mini",type:"Racing",weight:"195g",camera:"Foxeer Predator",flightTime:"4-5 min",price:11999,platform:"Lazada"},
+            {name:"Flywoo Firefly Hex",type:"Racing",weight:"425g",camera:"Runcam Racer 5",flightTime:"5-6 min",price:18999,platform:"Shopee"},
+            {name:"BetaFPV X-Knight 360",type:"Racing",weight:"348g",camera:"Caddx Ratel 2",flightTime:"4 min",price:16499,platform:"TikTok"},
+            {name:"GEPRC CineLog25",type:"Freestyle",weight:"189g",camera:"Naked GoPro",flightTime:"7-8 min",price:15999,platform:"Lazada"},
+            {name:"IFlight Protek25",type:"Freestyle",weight:"178g",camera:"Insta360 GO",flightTime:"6-7 min",price:14999,platform:"Shopee"},
+            {name:"iFlight Chimera4",type:"Freestyle",weight:"265g",camera:"GoPro Lite",flightTime:"6-7 min",price:16999,platform:"TikTok"},
+            {name:"Diatone Taycan MX-C",type:"Freestyle",weight:"378g",camera:"DJI Action",flightTime:"5-6 min",price:19999,platform:"Lazada"},
+            {name:"HGLRC Sector5 V3",type:"Freestyle",weight:"352g",camera:"Naked GoPro",flightTime:"6 min",price:17999,platform:"Shopee"},
+            {name:"BetaFPV Pavo30",type:"Freestyle",weight:"245g",camera:"GoPro Hero",flightTime:"7-8 min",price:17499,platform:"TikTok"},
+            {name:"Flywoo Explorer LR 5",type:"Freestyle",weight:"315g",camera:"DJI Vista",flightTime:"8-9 min",price:21999,platform:"Lazada"},
+            {name:"GEPRC Smart35",type:"Freestyle",weight:"268g",camera:"Caddx Loris",flightTime:"7 min",price:18999,platform:"Shopee"},
+            {name:"IFlight Defender25",type:"Freestyle",weight:"185g",camera:"Naked GoPro Lite",flightTime:"6-7 min",price:15499,platform:"TikTok"},
+            {name:"iFlight Titan DC6",type:"Freestyle",weight:"485g",camera:"GoPro Hero 11",flightTime:"6-7 min",price:22999,platform:"Lazada"},
+            {name:"Flywoo Explorer LR 6",type:"Cinematic",weight:"425g",camera:"DJI O3",flightTime:"9-10 min",price:27999,platform:"Shopee"},
+            {name:"GEPRC CineLog20",type:"Cinematic",weight:"155g",camera:"Naked GoPro Lite",flightTime:"10-12 min",price:13999,platform:"TikTok"},
+            {name:"IFlight Chimera8",type:"Cinematic",weight:"620g",camera:"GoPro Hero 12",flightTime:"7-8 min",price:33999,platform:"Lazada"},
+            {name:"BetaFPV Pavo35 O3",type:"Cinematic",weight:"298g",camera:"DJI O3 Air",flightTime:"8-9 min",price:29999,platform:"Shopee"},
+            {name:"Diatone Roma F7",type:"Cinematic",weight:"545g",camera:"GoPro Hero 10",flightTime:"8-9 min",price:31999,platform:"TikTok"},
+            {name:"HGLRC Veyron 6",type:"Cinematic",weight:"465g",camera:"DJI Action 2",flightTime:"7-8 min",price:24999,platform:"Lazada"},
+            {name:"iFlight Evoque F6X",type:"Cinematic",weight:"525g",camera:"Insta360 GO 3",flightTime:"8-9 min",price:26999,platform:"Shopee"},
+            {name:"GEPRC CinePro 6K",type:"Cinematic",weight:"385g",camera:"Caddx Vista",flightTime:"9-10 min",price:28999,platform:"TikTok"},
+            {name:"Flywoo Explorer LR 8",type:"Cinematic",weight:"615g",camera:"DJI O3",flightTime:"11-13 min",price:34999,platform:"Lazada"},
+            {name:"IFlight Titan XL7",type:"Cinematic",weight:"695g",camera:"GoPro Hero 11",flightTime:"9-11 min",price:36999,platform:"Shopee"},
+            {name:"Emax Tinyhawk 3 Plus",type:"Beginner",weight:"48g",camera:"Runcam Nano 4",flightTime:"5-6 min",price:8499,platform:"TikTok"},
+            {name:"BetaFPV Cetus X Pro",type:"Beginner",weight:"41g",camera:"BetaFPV Lite Pro",flightTime:"5-6 min",price:7699,platform:"Lazada"},
+            {name:"GEPRC TinyGO 4K",type:"Beginner",weight:"45g",camera:"Caddx Ant Lite",flightTime:"5 min",price:7299,platform:"Shopee"},
+            {name:"IFlight Alpha A85X",type:"Beginner",weight:"82g",camera:"Runcam Thumb Pro",flightTime:"4-5 min",price:9999,platform:"TikTok"},
+            {name:"Mobula7 HD",type:"Beginner",weight:"32g",camera:"Caddx Turtle HD",flightTime:"3-4 min",price:7499,platform:"Lazada"},
+            {name:"BetaFPV Meteor75 Pro",type:"Beginner",weight:"35g",camera:"BetaFPV Micro HD",flightTime:"4-5 min",price:7799,platform:"Shopee"},
+            {name:"Emax Tinyhawk 2 Freestyle",type:"Beginner",weight:"42g",camera:"Runcam Nano 2",flightTime:"4-5 min",price:8299,platform:"TikTok"},
+            {name:"GEPRC Phantom Lite V2",type:"Beginner",weight:"355g",camera:"Caddx Baby Turtle V2",flightTime:"5-6 min",price:13999,platform:"Lazada"},
+            {name:"IFlight Alpha A75",type:"Beginner",weight:"65g",camera:"Runcam Split Mini",flightTime:"4 min",price:9499,platform:"Shopee"},
+            {name:"DarwinFPV Baby Ape Lite",type:"Beginner",weight:"315g",camera:"Foxeer Micro",flightTime:"4-5 min",price:12499,platform:"TikTok"},
+            {name:"BetaFPV Meteor85",type:"Micro",weight:"41g",camera:"BetaFPV Micro",flightTime:"3-4 min",price:7499,platform:"Lazada"},
+            {name:"Mobula6 HD",type:"Micro",weight:"23g",camera:"Runcam Nano 3",flightTime:"3-4 min",price:6799,platform:"Shopee"},
+            {name:"Emax Nanohawk X",type:"Micro",weight:"36g",camera:"Runcam Nano 2",flightTime:"4 min",price:7199,platform:"TikTok"},
+            {name:"BetaFPV Cetus X Kit",type:"Micro",weight:"39g",camera:"BetaFPV Lite V2",flightTime:"4-5 min",price:7899,platform:"Lazada"},
+            {name:"GEPRC TinyGO HD",type:"Micro",weight:"44g",camera:"Caddx Ant HD",flightTime:"4-5 min",price:7599,platform:"Shopee"},
+            {name:"NewBeeDrone AcroBee",type:"Micro",weight:"26g",camera:"Runcam Nano 3",flightTime:"3-4 min",price:6199,platform:"TikTok"},
+            {name:"IFlight Alpha A95",type:"Micro",weight:"85g",camera:"Runcam Nano 4",flightTime:"4-5 min",price:9999,platform:"Lazada"},
+            {name:"HGLRC Petrel 85",type:"Micro",weight:"32g",camera:"Caddx Baby Ratel",flightTime:"3-4 min",price:6799,platform:"Shopee"},
+            {name:"BetaFPV Pavo25 V2",type:"Micro",weight:"98g",camera:"Naked GoPro Lite",flightTime:"5-6 min",price:12499,platform:"TikTok"},
+            {name:"Mobula8 HD",type:"Micro",weight:"38g",camera:"Caddx Ant HD",flightTime:"3-4 min",price:7499,platform:"Lazada"}
+        ];
+        var g=document.getElementById('droneGrid');
+        for(var i=0;i<drones.length;i++){
+            var d=drones[i];
+            g.innerHTML+='<div class="drone-card"><div class="drone-header"><div class="drone-name">'+d.name+'</div><span class="drone-type">'+d.type+'</span></div><div class="drone-specs"><div class="spec-row"><span class="spec-label">Weight</span><span class="spec-value">'+d.weight+'</span></div><div class="spec-row"><span class="spec-label">Camera</span><span class="spec-value">'+d.camera+'</span></div><div class="spec-row"><span class="spec-label">Flight Time</span><span class="spec-value">'+d.flightTime+'</span></div></div><div class="drone-price"><span class="price">₱'+d.price.toLocaleString()+'</span><span class="platform '+d.platform.toLowerCase()+'">'+d.platform+'</span></div></div>';
+        }
+    </script>
+</body>
+</html>
